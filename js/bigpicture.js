@@ -19,7 +19,6 @@ const commentsCount = document.querySelector('.comments-count');
 
 //Комменты
 const commentsList = document.querySelector('.social__comments');
-//const avatar = commentsList.children; //работает только для первого,а надо для 2 комментариев
 const avatar = commentsList.querySelectorAll('.social__comment img');
 const signature = document.querySelector('.social__caption');
 const socialText = commentsList.querySelectorAll('.social__text');
