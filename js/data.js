@@ -1,26 +1,4 @@
-const randomiseValue = function(min, max) {
-  if (min >= 0) {
-    min = Math.ceil(min);
-    max = Math.floor(max);
-    if (max < min) {
-      const helper = min;
-      min = max;
-      max = helper;
-    } else if (max === min) {
-      return max;
-    }
-    return Math.floor(Math.random()*(max-min+1))+min; //нашла тут https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-  }
-};
-const verifyLength = function(line, maxLength) {
-    if (line.length <= maxLength) {
-    return true;
-  } else {
-    return false;
-  }
-};
-
-verifyLength('Some text', 26);
+import {randomiseValue, getElement, getRandomArrayElement,createUnique} from './util.js';
 
 const COMMENTS = [
   'Всё отлично!',
@@ -51,21 +29,6 @@ const PHOTO_DESCRIPTION = [
 
 const PHOTO_COUNT = 25;
 
-const getRandomArrayElement = (elements) =>  elements[randomiseValue(0, elements.length - 1)];
-
-const createUnique = (a,b) => {
-  const arr = [];
-  const total = b - a + 1;
-  do {
-    const randomNumber = randomiseValue(a,b);
-    if (!arr.includes(randomNumber)) {
-      arr.push(randomNumber);
-    }
-  } while (arr.length < total);
-  return arr;
-};
-
-const getElement = (arr,k) => arr[k];
 
 const ArrOfValues = createUnique(1, PHOTO_COUNT);
 let numb = -1;
@@ -98,8 +61,5 @@ const createPhoto = () => {
 
 const similarPhoto = Array.from({length: PHOTO_COUNT}, createPhoto);
 
-for (let i = 0; i <= similarPhoto.length; i++) {
-  getElement(similarPhoto,i);
-}
-import './data.js';
-import './miniatures.js';
+
+export {similarPhoto};
