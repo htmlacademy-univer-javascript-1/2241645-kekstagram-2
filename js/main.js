@@ -1,5 +1,5 @@
 const randomiseValue = function(min, max) {
-  if (min >= 0) {
+if (min >= 0) {
     min = Math.ceil(min);
     max = Math.floor(max);
     if (max < min) {
@@ -13,9 +13,9 @@ const randomiseValue = function(min, max) {
   }
 };
 const verifyLength = function(line, maxLength) {
-    if (line.length <= maxLength) {
-    return true;
-  } else {
+if (line.length <= maxLength) {
+return true;
+} else {
     return false;
   }
 };
