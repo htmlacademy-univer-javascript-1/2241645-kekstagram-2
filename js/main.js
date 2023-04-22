@@ -102,3 +102,4 @@ for (let i = 0; i <= similarPhoto.length; i++) {
 }
 import './data.js';
 import './miniatures.js';
+import './bigpicture.js';
