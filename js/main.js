@@ -95,7 +95,6 @@ const createPhoto = () => {
     comments: getRandomArrayElement(SIMILAR_COMMENT),
   };
 };
-
 const similarPhoto = Array.from({length: PHOTO_COUNT}, createPhoto);
 
 for (let i = 0; i <= similarPhoto.length; i++) {
