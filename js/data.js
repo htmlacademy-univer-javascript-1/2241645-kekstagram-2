@@ -16,7 +16,7 @@ const NAME = ['Вася','Петя','Сергей','Галя','Марина','А
 
 const IMG = ['img/avatar-1.svg','img/avatar-2.svg','img/avatar-3.svg','img/avatar-4.svg','img/avatar-5.svg','img/avatar-6.svg'];
 
-//Функция, для генерации комментариев
+//Генерация комментариев
 const createComment = () => (
   {
     id: generateNumberComment(),
@@ -25,7 +25,7 @@ const createComment = () => (
     name: NAME[getRandomPositiveInteger(0, NAME.length - 1)],
   }
 );
-// Функция,возвращающая объект данных- описание фотографии, опубликованной пользователем.
+// Возврат описания фотографии
 const createDescriptionPhotoUser = () => ({
   id: generateNumberId(),
   url: `photos/${generateNumberUrl()}.jpg`,
@@ -35,7 +35,7 @@ const createDescriptionPhotoUser = () => ({
 }
 );
 
-//Функция, для вызова N-го количества раз
+//Вызов N-го колва раз
 const numberPhotoUsers = Array.from({ length: PHOTOLENGTH }, createDescriptionPhotoUser);
 
 // eslint-disable-next-line no-unused-expressions
