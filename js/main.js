@@ -101,3 +101,5 @@ const similarPhoto = Array.from({length: PHOTO_COUNT}, createPhoto);
 for (let i = 0; i <= similarPhoto.length; i++) {
   getElement(similarPhoto,i);
 }
+import './data.js';
+import './miniatures.js';
