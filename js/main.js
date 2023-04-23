@@ -3,6 +3,6 @@ import {insertPhotoMiniature} from './miniatures.js';
 import {showFileForm} from './form.js';
 
 const descriptions = Array.from({length: PHOTOS_COUNT}, generateDescription);
-insertminiatures(descriptions);
+insertPhotoMiniature(descriptions);
 
 document.querySelector('#upload-file').addEventListener('change', showFileForm);
