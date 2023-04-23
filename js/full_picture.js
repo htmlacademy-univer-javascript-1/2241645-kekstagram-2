@@ -1,65 +1,42 @@
-import { miniaturesList } from './miniatures.js';
-import { createComment } from './data.js';
-import { createDescriptionPhotoUser } from './data.js';
+import {getCloseListers} from './util.js';
 
-//Окно 
-const activeImg = document.querySelector('.big-picture');
-const body = document.querySelector('body');
+const bigPicture = document.querySelector('.big-picture');
+const closeButton = bigPicture.querySelector('#picture-cancel');
+const [closeBigPicture, closeEscape] = getCloseListers(bigPicture, closeButton);
 
-// Вставка данных
-const preview = miniaturesList.querySelector('.picture__img');
-const likes = miniaturesList.querySelector('.picture__likes');
-const comments = miniaturesList.querySelector('.picture__comments');
-const previews = miniaturesList.querySelectorAll('.pictures a');
+const avatarImageSize = 35;
 
-// Вставка картинок
-const bigPictireImg = document.querySelector('.big-picture__img img');
-const likesCount = document.querySelector('.likes-count');
-const commentsCount = document.querySelector('.comments-count');
-
-//Комменты
-const commentsList = document.querySelector('.social__comments');
-const avatar = commentsList.querySelectorAll('.social__comment img');
-const signature = document.querySelector('.social__caption');
-const socialText = commentsList.querySelectorAll('.social__text');
-const descriptionUser = createDescriptionPhotoUser();
-const socialCommentsCount = document.querySelector('.social__comment-count');
-const commentsLoader = document.querySelector('.comments-loader');
-
-//Обработчик кликов и вставка данных
-for ( let i = 0; i < previews.length; i++) {
-  const button = previews[i];
-  button.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    activeImg.classList.remove('hidden');
-    socialCommentsCount.classList.add('hidden');
-    commentsLoader.classList.add('hidden');
-    body.classList.add('modal-open');
-    bigPictireImg.src=preview.src;
-    likesCount.textContent = likes.textContent;
-    commentsCount.textContent = comments.textContent;
-    for(let k = 0; i<= avatar.length - 1 ; k++){
-      const commentsUsers = createComment();
-      const element = avatar[k];
-      element.src=commentsUsers.avatar;
-      element.alt=commentsUsers.name;
-    }
-    for(let j = 0; j <= socialText.length - 1 ; j++){
-      const commentsUsers = createComment();
-      const element = socialText[j];
-      element.textContent = commentsUsers.message;
-    }
-    signature.textContent = descriptionUser.description;
-  });
+function createBigPicture({url, likes, description, comments}){
+  bigPicture.querySelector('.big-picture__img').children[0].src = url;
+  bigPicture.querySelector('.likes-count').textContent = likes;
+  bigPicture.querySelector('.comments-count').textContent = comments.length;
+  const commentsFragment = document.createDocumentFragment();
+  for (const {avatar, message, name} of comments){
+    const listElem = document.createElement('li');
+    listElem.classList.add('social__comment');
+    const avatarImg = document.createElement('img');
+    avatarImg.classList.add('social__picture');
+    avatarImg.src = avatar;
+    avatarImg.alt = name;
+    avatarImg.width = avatarImageSize;
+    avatarImg.height = avatarImageSize;
+    const commentText = document.createElement('p');
+    commentText.classList.add('social__text');
+    commentText.textContent = message;
+    listElem.appendChild(avatarImg);
+    listElem.appendChild(commentText);
+    commentsFragment.appendChild(listElem);
+  }
+  bigPicture.querySelector('.social__comments').replaceChildren(commentsFragment);
+  bigPicture.querySelector('.social__caption').textContent = description;
 }
 
-const bigPictureCancel = document.querySelector('#picture-cancel');
-bigPictureCancel.addEventListener('click', () => {
-  activeImg.classList.add('hidden');
-});
-document.addEventListener('keydown',(evt) => {
-  if(evt.key==='Escape'){
-    evt.preventDefault();
-    activeImg.classList.add('hidden');
-  }
-});
+export function showBigPicture(picture){
+  createBigPicture(picture);
+  bigPicture.querySelector('.social__comment-count').classList.add('hidden');
+  bigPicture.querySelector('.comments-loader').classList.add('hidden');
+  document.body.classList.add('modal-open');
+  bigPicture.classList.remove('hidden');
+  document.addEventListener('keydown', closeEscape);
+  closeButton.addEventListener('click', closeBigPicture);
+}
