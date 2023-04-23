@@ -1,4 +1,4 @@
-import {showFullpicture} from './full_picture.js';
+import {showBigPicture} from './full_picture.js';
 
 const pictureTemplate = document.querySelector('#picture');
 const pictureContainer = document.querySelector('.pictures');
@@ -10,7 +10,7 @@ export function insertminiatures(descriptions) {
     picture.querySelector('.picture__img').src = desc.url;
     picture.querySelector('.picture').addEventListener('click', (ev) => {
       ev.preventDefault();
-      showFullpicture(desc);
+      showBigPicture(desc);
     });
     picture.querySelector('.picture__likes').textContent = desc.likes;
     picture.querySelector('.picture__comments').textContent = desc.comments.length;
