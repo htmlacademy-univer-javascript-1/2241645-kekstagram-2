@@ -1,9 +1,9 @@
 import { miniaturesList } from './miniatures.js';
 import { createComment } from './data.js';
 import { createDescriptionPhotoUser } from './data.js';
+
 //Окно 
 const activeImg = document.querySelector('.big-picture');
-
 const body = document.querySelector('body');
 
 // Вставка данных
@@ -53,8 +53,8 @@ for ( let i = 0; i < previews.length; i++) {
   });
 }
 
-const bigPictureCansel = document.querySelector('#picture-cancel');
-bigPictureCansel.addEventListener('click', () => {
+const bigPictureCancel = document.querySelector('#picture-cancel');
+bigPictureCancel.addEventListener('click', () => {
   activeImg.classList.add('hidden');
 });
 document.addEventListener('keydown',(evt) => {
