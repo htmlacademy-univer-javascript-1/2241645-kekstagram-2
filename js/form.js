@@ -1,103 +1,57 @@
-import './hashtadsvalid.js';
-import { input,hashtagsValid } from './hashtadsvalid.js';
-const imgOverlay = document.querySelector('.img-upload__overlay');
-const start = document.querySelector('.img-upload__start input');
+import {getCloseListers, trimField} from './util.js';
+import {validator} from './hashtagsvalid.js';
 
-const photoUser = document.querySelector('#upload-file');
+const overlay = document.querySelector('.img-upload__overlay');
+const form = document.querySelector('#upload-select-image');
+const closeButton = overlay.querySelector('#upload-cancel');
+const hashtagField = form.querySelector('.text__hashtags');
+const descField = form.querySelector('.text__description');
+const [closeForm, closeEscape] = getCloseListers(overlay, closeButton, clearForm);
+const scale = form.querySelector('.scale__control--value');
+const scaleControls = form.querySelectorAll('button.scale__control');
 
-const body=document.querySelector('body');
-const imgPreview = document.querySelector('.img-upload__preview img');//для замены на пользовательское
-start.onchange = function () {
-  imgOverlay.classList.remove('hidden');
-  body.classList.add('modal-open');
-  imgPreview.src = photoUser.value;
-};
+const scaleValueMin = 25;
+const scaleValueMax = 100;
 
-const cancel = document.querySelector('.img-upload__cancel');
-cancel.addEventListener('click', () => {
-  imgOverlay.classList.add('hidden');
-  body.classList.remove('modal-open');
-  photoUser.value ='';
-});
+const trimFieldOnChange = (ev) => trimField(ev.target);
+const stopPropogation = (ev) => ev.stopPropagation();
 
-document.addEventListener('keydown', (evt) => {
-  if (evt.key === 'Escape') {
-    evt.preventDefault();
-    imgOverlay.classList.add('hidden');
-    body.classList.remove('modal-open');
-    photoUser.value = '';
+function submitForm(ev) {
+  if (!validator.validate()) {
+    ev.preventDefault();
   }
-});
+}
 
-// показ сообщения,что сообщение отправлено БЛОК РАБОТАЕТ КАК НАДО
-const showSuccessMessageModal = () => {
-  const successModal = document.querySelector('#success').content.querySelector('.success');
-  const clonedSuccessModal = successModal.cloneNode(true);
-  const closeSuccessModalButtonElement = clonedSuccessModal.querySelector('.success__button');
-
-  closeSuccessModalButtonElement.addEventListener('click',(evt) =>{
-    evt.preventDefault();
-    body.removeChild(clonedSuccessModal);
-
-  } );
-
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      clonedSuccessModal.remove();
-    }
-  });
-
-  document.addEventListener('click',()  => {
-    clonedSuccessModal.remove();
-  });
-  document.body.append(clonedSuccessModal);
-};
-//показ сообщения об ошибке БЛОК РАБОТАЕТ
-const showErrorMessageModal = () =>{
-  const errorModal = document.querySelector('#error').content.querySelector('.error');
-  const clonedErrorModal = errorModal.cloneNode(true);
-  const closeErrorModalButtonElement = clonedErrorModal.querySelector('.error__button');
-  closeErrorModalButtonElement.addEventListener('click', (evt) => {
-    evt.preventDefault();
-    body.removeChild(clonedErrorModal);
-  });
-  document.addEventListener('keydown', (evt) => {
-    if (evt.key === 'Escape') {
-      evt.preventDefault();
-      clonedErrorModal.remove();
-    }
-  });
-  document.addEventListener('click', () => {
-    clonedErrorModal.remove();
-  });
-  document.body.append(clonedErrorModal);
-};
-
-const form = document.querySelector('.img-upload__form');
-const pristine = new Pristine(form);
-pristine.addValidator(document.querySelector('[name="hashtags"]'), hashtagsValid);
-
-form.addEventListener('submit', (evt) => {
-  evt.preventDefault();
-  if (input.value==='') {
-    showSuccessMessageModal();
-    imgOverlay.classList.add('hidden');
-    body.classList.remove('modal-open');
-    photoUser.value = '';//позволяет загрузить одну и ту же фотку
-    input.value = '';
+function changeScale(ev) {
+  const newVal = +(scale.value.slice(0, -1)) + +ev.target.dataset.delta;
+  if (newVal >= scaleValueMin && newVal <= scaleValueMax) {
+    scale.value = `${newVal}%`;
   }
-  else if (pristine.validate()) {
-    showSuccessMessageModal();
-    imgOverlay.classList.add('hidden');
-    body.classList.remove('modal-open');
-    photoUser.value = '';
-    input.value = '';
-  }
-  else {
-    showErrorMessageModal();
-    imgOverlay.classList.add('hidden');
-    body.classList.remove('modal-open');
-    photoUser.value = '';
-  }
-});
+}
+
+function clearForm() {
+  form.reset();
+  scaleControls.forEach((ctrl) => {
+    ctrl.removeEventListener('click', changeScale);
+  });
+  form.removeEventListener('submit', submitForm);
+  hashtagField.removeEventListener('change', trimFieldOnChange);
+  hashtagField.removeEventListener('keydown', stopPropogation);
+  descField.removeEventListener('change', trimFieldOnChange);
+  descField.removeEventListener('keydown', stopPropogation);
+}
+
+export function showFileForm() {
+  form.addEventListener('submit', submitForm);
+  scaleControls.forEach((ctrl) => {
+    ctrl.addEventListener('click', changeScale);
+  });
+  hashtagField.addEventListener('change', trimFieldOnChange);
+  hashtagField.addEventListener('keydown', stopPropogation);
+  descField.addEventListener('change', trimFieldOnChange);
+  descField.addEventListener('keydown', stopPropogation);
+  closeButton.addEventListener('click', closeForm);
+  document.addEventListener('keydown', closeEscape);
+  overlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
+}

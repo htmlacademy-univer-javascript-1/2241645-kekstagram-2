@@ -1,20 +1,20 @@
-import { numberPhotoUsers } from './data.js';
+import {showBigPicture} from './full_picture.js';
 
-const miniaturesFragment = document.createDocumentFragment();
+const pictureTemplate = document.querySelector('#picture');
+const pictureContainer = document.querySelector('.pictures');
 
-
-//Добавление
-const miniaturesList = document.querySelector('.pictures');
-//Шаблон
-const miniaturesTemplate = document.querySelector('#picture').content;
-
-const simularMiniatures = numberPhotoUsers;
-simularMiniatures.forEach(({url, likes, comments})=>{
-  const miniatures = miniaturesTemplate.cloneNode(true);
-  miniatures.querySelector('.picture__img').src = url;
-  miniatures.querySelector('.picture__likes').textContent=likes;
-  miniatures.querySelector('.picture__comments').textContent=comments.length;
-  miniaturesFragment.appendChild(miniatures);
-});
-miniaturesList.appendChild(miniaturesFragment);
-export { miniaturesList };
+export function insertminiatures(descriptions) {
+  const pictureFragment = document.createDocumentFragment();
+  for (const desc of descriptions) {
+    const picture = pictureTemplate.cloneNode(true).content;
+    picture.querySelector('.picture__img').src = desc.url;
+    picture.querySelector('.picture').addEventListener('click', (ev) => {
+      ev.preventDefault();
+      showBigPicture(desc);
+    });
+    picture.querySelector('.picture__likes').textContent = desc.likes;
+    picture.querySelector('.picture__comments').textContent = desc.comments.length;
+    pictureFragment.appendChild(picture);
+  }
+  pictureContainer.appendChild(pictureFragment);
+}

@@ -1,43 +1,60 @@
-import {randomiseValue, getElement, getRandomArrayElement,createUnique} from './util.js';
-const PHOTOLENGTH = 25;
-const generateNumberId = createRandom(1, PHOTOLENGTH);
-const generateNumberUrl = createRandom(1, PHOTOLENGTH);
-const NUMBERCOMMENT = 1000;
-const generateNumberComment = createRandom(0, NUMBERCOMMENT);
+import {getRandomInt} from './util.js';
 
-const MESSAGE = ['Всё отлично!',
+const PHOTOS_COUNT = 25;
+
+const MESSAGES = ['Всё отлично!',
   'В целом всё неплохо. Но не всё.',
   'Когда вы делаете фотографию, хорошо бы убирать палец из кадра. В конце концов это просто непрофессионально.',
   'Моя бабушка случайно чихнула с фотоаппаратом в руках и у неё получилась фотография лучше.',
   'Я поскользнулся на банановой кожуре и уронил фотоаппарат на кота и у меня получилась фотография лучше.',
   'Лица у людей на фотке перекошены, как будто их избивают. Как можно было поймать такой неудачный момент?!',];
 
-const NAME = ['Вася','Петя','Сергей','Галя','Марина','Александр',];
+const NAMES = ['Вася','Петя','Сергей','Галя','Марина','Александр',];
 
-const IMG = ['img/avatar-1.svg','img/avatar-2.svg','img/avatar-3.svg','img/avatar-4.svg','img/avatar-5.svg','img/avatar-6.svg'];
+const DESCRIPTIONS = Array.from({length: PHOTOS_COUNT}, (_, i) => `Описание ${i}`);
 
-//Генерация комментариев
-const createComment = () => (
-  {
-    id: generateNumberComment(),
-    avatar: IMG[getRandomPositiveInteger(0, IMG.length - 1)],
-    message: MESSAGE[getRandomPositiveInteger(0, MESSAGE.length - 1)],
-    name: NAME[getRandomPositiveInteger(0, NAME.length - 1)],
+const COMMENT_IDS = [];
+
+const getRandomLikes = () => getRandomInt(15, 200);
+
+const getRandomElement = (arr) => arr[getRandomInt(0, arr.length - 1)];
+
+const getId = (() => {
+  let id = 1;
+  return () => id++;
+})();
+
+function getCommentId() {
+  let id = getRandomInt(1, 1000);
+  while (COMMENT_IDS.includes(id)) {
+    id = getRandomInt(1, 1000);
   }
-);
-// Возврат описания фотографии
-const createDescriptionPhotoUser = () => ({
-  id: generateNumberId(),
-  url: `photos/${generateNumberUrl()}.jpg`,
-  description: 'Фото для Кекстаграма',
-  likes: getRandomPositiveInteger(15, 200),
-  comments: Array.from({ length: getRandomPositiveInteger(1, 10) }, createComment),
+  return id;
 }
-);
 
-//Вызов N-го колва раз
-const numberPhotoUsers = Array.from({ length: PHOTOLENGTH }, createDescriptionPhotoUser);
+function generateComment() {
+  const messageTexts = [];
+  for (let i = 0; i < getRandomInt(1, 2); i++) {
+    messageTexts.push(getRandomElement(MESSAGES));
+  }
+  return {
+    id: getCommentId(),
+    avatar: `img/avatar-${getRandomInt(1, 6)}.svg`,
+    message: messageTexts.join(' '),
+    name: getRandomElement(NAMES)
+  };
+}
 
-// eslint-disable-next-line no-unused-expressions
+function generateDescription() {
+  const comments = Array.from({length: getRandomInt(0, 3)}, generateComment);
+  const id = getId();
+  return {
+    id: id,
+    url: `photos/${id}.jpg`,
+    description: DESCRIPTIONS[id - 1],
+    likes: getRandomLikes(),
+    comments: comments
+  };
+}
 
-export { numberPhotoUsers, createComment, createDescriptionPhotoUser };
+export {generateDescription, PHOTOS_COUNT};
