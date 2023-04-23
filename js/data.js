@@ -17,7 +17,7 @@ const NAME = ['Вася','Петя','Сергей','Галя','Марина','А
 const IMG = ['img/avatar-1.svg','img/avatar-2.svg','img/avatar-3.svg','img/avatar-4.svg','img/avatar-5.svg','img/avatar-6.svg'];
 
 //Генерация комментариев
-const createComment = () => (
+const createComment = function() (
   {
     id: generateNumberComment(),
     avatar: IMG[getRandomPositiveInteger(0, IMG.length - 1)],
@@ -26,7 +26,8 @@ const createComment = () => (
   }
 );
 // Возврат описания фотографии
-const createDescriptionPhotoUser = () => ({
+const createDescriptionPhotoUser = function() {
+  return {
   id: generateNumberId(),
   url: `photos/${generateNumberUrl()}.jpg`,
   description: 'Фото для Кекстаграма',
