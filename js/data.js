@@ -1,4 +1,4 @@
-import {randomiseValue, getElement, getRandomArrayElement,createUnique} from './util.js';
+import {getRandomPositiveInteger, createRandom} from './util.js';
 const PHOTOLENGTH = 25;
 const generateNumberId = createRandom(1, PHOTOLENGTH);
 const generateNumberUrl = createRandom(1, PHOTOLENGTH);
