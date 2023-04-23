@@ -1,30 +1,57 @@
-import {isCorrectLength} from './util.js';
+import {getCloseListers, trimField} from './util.js';
+import {validator} from './hashtagsvalid.js';
 
+const overlay = document.querySelector('.img-upload__overlay');
 const form = document.querySelector('#upload-select-image');
+const closeButton = overlay.querySelector('#upload-cancel');
 const hashtagField = form.querySelector('.text__hashtags');
 const descField = form.querySelector('.text__description');
-const descriptionMaxLength = 140;
-const hashtagsMaxCount = 5;
+const [closeForm, closeEscape] = getCloseListers(overlay, closeButton, clearForm);
+const scale = form.querySelector('.scale__control--value');
+const scaleControls = form.querySelectorAll('button.scale__control');
 
-export const validator = new Pristine(form, {
-  classTo: 'img-upload__field-wrapper',
-  errorClass: 'img-upload__field-wrapper--invalid',
-  successClass: 'img-upload__field-wrapper--valid',
-  errorTextParent: 'img-upload__field-wrapper',
-  errorTextTag: 'span',
-  errorTextClass: 'img-upload__field__error'
-});
-validator.addValidator(hashtagField, validateHashtags, 'Хэштегов может быть не больше 5 через пробел.' +
-  ' Допускаются только буквы и числа.');
-validator.addValidator(descField, validateDescription, 'Максимальное количество символов - 140');
+const scaleValueMin = 25;
+const scaleValueMax = 100;
 
-function validateDescription(value) {
-  return isCorrectLength(value, descriptionMaxLength);
+const trimFieldOnChange = (ev) => trimField(ev.target);
+const stopPropogation = (ev) => ev.stopPropagation();
+
+function submitForm(ev) {
+  if (!validator.validate()) {
+    ev.preventDefault();
+  }
 }
 
-function validateHashtags(value) {
-  const hashtags = value.split(' ').map((v) => v.toLowerCase());
-  return (new Set(hashtags)).size === hashtags.length &&
-    hashtags.length <= hashtagsMaxCount &&
-    hashtags.every((tag) => /^#[а-яa-z0-9]{1,19}}$/.test(tag));
+function changeScale(ev) {
+  const newVal = +(scale.value.slice(0, -1)) + +ev.target.dataset.delta;
+  if (newVal >= scaleValueMin && newVal <= scaleValueMax) {
+    scale.value = `${newVal}%`;
+  }
+}
+
+function clearForm() {
+  form.reset();
+  scaleControls.forEach((ctrl) => {
+    ctrl.removeEventListener('click', changeScale);
+  });
+  form.removeEventListener('submit', submitForm);
+  hashtagField.removeEventListener('change', trimFieldOnChange);
+  hashtagField.removeEventListener('keydown', stopPropogation);
+  descField.removeEventListener('change', trimFieldOnChange);
+  descField.removeEventListener('keydown', stopPropogation);
+}
+
+export function showFileForm() {
+  form.addEventListener('submit', submitForm);
+  scaleControls.forEach((ctrl) => {
+    ctrl.addEventListener('click', changeScale);
+  });
+  hashtagField.addEventListener('change', trimFieldOnChange);
+  hashtagField.addEventListener('keydown', stopPropogation);
+  descField.addEventListener('change', trimFieldOnChange);
+  descField.addEventListener('keydown', stopPropogation);
+  closeButton.addEventListener('click', closeForm);
+  document.addEventListener('keydown', closeEscape);
+  overlay.classList.remove('hidden');
+  document.body.classList.add('modal-open');
 }
