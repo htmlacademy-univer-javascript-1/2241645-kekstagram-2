@@ -32,3 +32,7 @@ export function getCloseListers(modal, closeButton, callback){
 export function trimField(field) {
   field.value = field.value.trimEnd();
 }
+
+export function transformFromHundredProcent(value, max, min, fixed) {
+  return ((value / 100) * (max - min) + min).toFixed(fixed);
+}
