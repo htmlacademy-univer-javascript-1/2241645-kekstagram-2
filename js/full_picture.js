@@ -10,7 +10,7 @@ const [closeBigPicture, closeEscape] = getCloseListers(bigPicture, closeButton, 
 });
 
 function createBigPicture({url, likes, description, comments}){
- updateComments = getCommentsUpdater(
+  updateComments = getCommentsUpdater(
     bigPicture.querySelector('.social__comments'),
     bigPicture.querySelector('.comments-current'),
     bigPicture.querySelector('.social__comments-loader'), comments, avatarImageSize);
