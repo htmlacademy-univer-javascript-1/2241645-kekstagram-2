@@ -23,7 +23,7 @@ const trimFieldOnChange = (ev) => trimField(ev.target);
 function submitForm(ev) {
   ev.preventDefault();
   if (!validator.validate()) {
-       return;
+    return;
   }
   sendForm(new FormData(ev.target))
     .then((r) => r.json())
@@ -35,7 +35,7 @@ function submitForm(ev) {
 function changeScale(ev) {
   const newVal = +(scale.value.slice(0, -1)) + +ev.target.dataset.delta;
   if (newVal >= scaleValueMin && newVal <= scaleValueMax) {
-     img.classList.remove(`scale-${scale.value.slice(0, -1)}`);
+    img.classList.remove(`scale-${scale.value.slice(0, -1)}`);
     scale.value = `${newVal}%`;
     img.classList.add(`scale-${newVal}`);
   }
