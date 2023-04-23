@@ -1,24 +1,34 @@
-//Возвращает случайное целое число из переданного диапазона включительно
-function getRandomPositiveInteger(a, b) {
-  const lower = Math.ceil(Math.min(Math.abs(a), Math.abs(b)));
-  const upper = Math.floor(Math.max(Math.abs(a), Math.abs(b)));
-  const result = Math.random() * (upper - lower + 1) + lower;
-  return Math.floor(result);
-}
-//Генерируюет число, которое не повторяется из диапазона включительно
-function createRandom(min, max) {
-  const previousValues = [];
+export const isCorrectLength = (str, maxLength) => str.length <= maxLength;
 
-  return function () {
-    let currentValue = getRandomPositiveInteger(min, max);
-    if (previousValues.length >= (max - min + 1)) {
-      return null;
-    }
-    while (previousValues.includes(currentValue)) {
-      currentValue = getRandomPositiveInteger(min, max);
-    }
-    previousValues.push(currentValue);
-    return currentValue;
-  };
+export function getRandomInt(from, to) {
+  if (from < 0 || to < 0) {
+    throw new RangeError('Числа в диапазоне должны быть положительными');
+  }
+
+  if (from === to) {
+    return from;
+  }
+  if (from > to) {
+    [from, to] = [to, from];
+  }
+
+  return Math.round(Math.random() * (to - from) + from);
 }
-export { getRandomPositiveInteger, createRandom};
+
+export function getCloseListers(modal, closeButton, callback){
+  const closeOnEscape = (ev) => ev.key === 'Escape' && closeModal();
+  function closeModal(){
+    if (callback){
+      callback();
+    }
+    modal.classList.add('hidden');
+    document.body.classList.remove('modal-open');
+    document.removeEventListener('keydown', closeOnEscape);
+    closeButton.removeEventListener('click', closeModal);
+  }
+  return [closeModal, closeOnEscape];
+}
+
+export function trimField(field) {
+  field.value = field.value.trimEnd();
+}
