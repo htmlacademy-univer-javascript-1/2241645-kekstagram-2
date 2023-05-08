@@ -47,6 +47,7 @@ export function getCloseListers(modal, closeButton, callback){
     }
     modal.classList.add('hidden');
     document.body.classList.remove('modal-open');
+    document.body.classList.remove('modal-prioritise-1');
     document.removeEventListener('keydown', closeOnEscape);
     closeButton.removeEventListener('click', closeModal);
   }
@@ -61,9 +62,11 @@ export function trimField(field) {
 export function transformFromHundredProcent(value, max, min, fixed) {
   return ((value / 100) * (max - min) + min).toFixed(fixed);
 }
+
 export function stopPropagation(ev) {
   ev.stopPropagation();
 }
+
 export function useCloseOnClickOutside(curElem, action) {
   const setEvent = () => {
     document.addEventListener('click', action);
@@ -82,3 +85,4 @@ export function debounce(callback, timeoutDelay = 500) {
     clearTimeout(timeoutId);
     timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
   };
+}
