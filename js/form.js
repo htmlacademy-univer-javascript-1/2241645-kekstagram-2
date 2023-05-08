@@ -69,4 +69,5 @@ export function showFileForm() {
   document.body.addEventListener('keydown', closeEscape);
   overlay.classList.remove('hidden');
   document.body.classList.add('modal-prioritise-1');
+  document.body.classList.add('modal-open');
 }
