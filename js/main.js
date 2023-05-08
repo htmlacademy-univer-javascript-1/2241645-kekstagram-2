@@ -1,4 +1,4 @@
-import {getMiniatures, PHOTOS_COUNT} from './api.js';
+import {getMiniatures} from './api.js';
 import {insertPhotoMiniature} from './miniatures.js';
 import {showFileForm} from './form.js';
 import {showFilters} from './filters.js';
