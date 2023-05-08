@@ -13,9 +13,7 @@ function createBigPicture({url, likes, description, comments}){
   updateComments = getCommentsUpdater(
     bigPicture.querySelector('.social__comments'),
     bigPicture.querySelector('.comments-current'),
-    bigPicture.querySelector('.social__comments-loader'), 
-    comments, 
-    avatarImageSize);
+    bigPicture.querySelector('.social__comments-loader'), comments, avatarImageSize);
   bigPicture.querySelector('.big-picture__img').children[0].src = url;   
   bigPicture.querySelector('.likes-count').textContent = likes;
   bigPicture.querySelector('.comments-count').textContent = comments.length;
