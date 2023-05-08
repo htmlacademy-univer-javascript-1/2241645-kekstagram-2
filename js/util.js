@@ -16,7 +16,7 @@ export function getRandomInt(from, to) {
 }
 
 export function useOnEscape(elem, callback, prioritise) {
-  
+
   const action = (ev) => document.body.classList.toString().split(' ')
     .filter((p) => p.startsWith('modal-prioritise'))
     .map((p) => +p.slice(17))
@@ -35,12 +35,11 @@ export function useOnEscape(elem, callback, prioritise) {
 }
 
 export function getCloseListers(modal, closeButton, callback){
-    const closeOnEscape = (ev) => document.body.classList.toString().split(' ')
+  const closeOnEscape = (ev) => document.body.classList.toString().split(' ')
     .filter((p) => p.startsWith('modal-prioritise'))
     .map((p) => +p.slice(17))
     .filter((p) => p > 1).length === 0 &&
     ev.key === 'Escape' && closeModal();
-  
   function closeModal(){
     if (callback){
       callback();
@@ -51,7 +50,6 @@ export function getCloseListers(modal, closeButton, callback){
     document.removeEventListener('keydown', closeOnEscape);
     closeButton.removeEventListener('click', closeModal);
   }
-  
   return [closeModal, closeOnEscape];
 }
 
